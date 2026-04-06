@@ -52,8 +52,10 @@ On first launch, Chorus opens a browser window. Log in to each provider you want
 ### 3. Run
 
 ```bash
-npm run dev
+npm start
 ```
+
+This builds the app and launches it in production mode. For development with hot-reload, use `npm run dev` instead.
 
 ---
 

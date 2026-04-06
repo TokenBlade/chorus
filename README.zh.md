@@ -52,8 +52,10 @@ npm install
 ### 3. 启动
 
 ```bash
-npm run dev
+npm start
 ```
+
+此命令会先构建应用，再以生产模式启动。如需开发模式（含热更新），请使用 `npm run dev`。
 
 ---
 
