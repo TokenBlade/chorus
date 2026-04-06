@@ -29,7 +29,7 @@ Chorus runs a browser in the background and operates each LLM's official web int
 
 ## Requirements
 
-- macOS (primary platform)
+- macOS (developed and tested on macOS only — Windows/Linux are untested and may require adjustments)
 - Node.js 18+
 - An active account on whichever LLM providers you want to use
 
