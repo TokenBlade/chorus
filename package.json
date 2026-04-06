@@ -1,0 +1,52 @@
+{
+  "name": "chorus",
+  "version": "0.1.0",
+  "description": "Run the same prompt across multiple LLMs simultaneously and compare responses side-by-side.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokenBlade/chorus.git"
+  },
+  "homepage": "https://github.com/TokenBlade/chorus",
+  "bugs": {
+    "url": "https://github.com/TokenBlade/chorus/issues"
+  },
+  "keywords": ["llm", "ai", "chatgpt", "claude", "gemini", "electron", "multi-llm"],
+  "license": "Apache-2.0",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "verify-db": "tsx scripts/verify-db.ts",
+    "postinstall": "electron-rebuild -m .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "katex": "^0.16.44",
+    "playwright": "^1.58.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "turndown": "^7.2.2",
+    "turndown-plugin-gfm": "^1.0.2"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.3",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/turndown": "^5.0.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-vite": "^2.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.2"
+  }
+}
