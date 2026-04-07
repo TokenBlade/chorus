@@ -51,7 +51,9 @@ export async function acquireProviderLock(provider: ProviderName): Promise<() =>
 }
 
 function getProfileDir(): string {
-  return path.join(app.getAppPath(), 'profiles', 'shared')
+  const profileDir = path.join(app.getPath('userData'), 'profiles', 'shared')
+  fs.mkdirSync(profileDir, { recursive: true })
+  return profileDir
 }
 
 function cleanStaleLock(profileDir: string): void {

@@ -1,5 +1,6 @@
 import type BetterSqlite3 from 'better-sqlite3'
 import path from 'path'
+import fs from 'fs'
 import { app } from 'electron'
 import { createTables } from './schema'
 
@@ -11,8 +12,9 @@ let db: BetterSqlite3.Database | null = null
 export function getDb(): BetterSqlite3.Database {
   if (db) return db
 
-  const dbDir = path.join(app.getAppPath(), 'data')
+  const dbDir = path.join(app.getPath('userData'), 'data')
   const dbPath = path.join(dbDir, 'app.db')
+  fs.mkdirSync(dbDir, { recursive: true })
 
   db = new Database(dbPath)
   db.pragma('journal_mode = WAL')
