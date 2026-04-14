@@ -286,8 +286,8 @@ body {
 }
 
 .history-more-btn:hover {
-  background: var(--bg-hover);
-  color: var(--sidebar-text);
+  background: var(--sidebar-hover);
+  color: var(--text-primary);
 }
 
 .history-item-menu {
@@ -316,7 +316,7 @@ body {
 }
 
 .history-item-menu-action:hover {
-  background: var(--bg-hover);
+  background: var(--sidebar-hover);
 }
 
 .history-item-menu-action.danger {
@@ -880,7 +880,7 @@ body {
 }
 
 .context-menu-item:hover {
-  background: var(--bg-hover);
+  background: var(--bg-surface-alt);
 }
 
 .action-buttons {
@@ -903,7 +903,7 @@ body {
 }
 
 .action-btn:hover {
-  background: var(--bg-hover);
+  background: var(--bg-surface-alt);
   color: var(--text-primary);
 }
 
