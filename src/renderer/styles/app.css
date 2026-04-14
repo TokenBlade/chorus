@@ -515,7 +515,6 @@ body {
   border-bottom: none;
   border-radius: 6px 6px 0 0;
   cursor: pointer;
-  text-transform: capitalize;
   position: relative;
   bottom: -2px;
   white-space: nowrap;
@@ -608,10 +607,6 @@ body {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-}
-
-.provider-header strong {
-  text-transform: capitalize;
 }
 
 .latency {
@@ -1362,7 +1357,6 @@ body {
 .turn-target {
   font-size: 0.7rem;
   font-weight: 600;
-  text-transform: capitalize;
   color: var(--accent-color);
   background: var(--bg-surface);
   padding: 0.1rem 0.4rem;
@@ -1393,7 +1387,6 @@ body {
 }
 
 .in-thread-header strong {
-  text-transform: capitalize;
   color: var(--text-primary);
 }
 
@@ -1448,7 +1441,6 @@ body {
   color: #fff;
   cursor: pointer;
   font-weight: 600;
-  text-transform: capitalize;
 }
 
 .in-thread-input.provider-chatgpt .in-thread-footer button { background: #10a37f; }

@@ -61,8 +61,8 @@ const translations = {
     'provider.claude': 'Claude',
     'provider.gemini': 'Gemini',
     'provider.deepseek': 'DeepSeek',
-    'provider.moonshot': 'Moonshot AI',
-    'provider.zai': 'Z.AI',
+    'provider.moonshot': 'Kimi',
+    'provider.zai': 'Z.ai',
   },
   zh: {
     'app.title': '多模型协作平台',
@@ -115,9 +115,9 @@ const translations = {
     'provider.chatgpt': 'ChatGPT',
     'provider.claude': 'Claude',
     'provider.gemini': 'Gemini',
-    'provider.deepseek': 'DeepSeek (深度求索)',
-    'provider.moonshot': 'Kimi (月之暗面)',
-    'provider.zai': 'Z.AI (智谱)',
+    'provider.deepseek': 'DeepSeek',
+    'provider.moonshot': 'Kimi',
+    'provider.zai': 'Z.ai',
   },
 } as const
 

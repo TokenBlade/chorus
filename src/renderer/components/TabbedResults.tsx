@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import ProviderCard from './ProviderCard'
 import ProviderIcon from './ProviderIcon'
+import { useLang } from '../i18n/LangContext'
+import { getProviderLabel } from '../utils/providerLabels'
 
 type ProviderResultData = {
   id: string
@@ -38,6 +40,7 @@ const STATUS_SYMBOLS: Record<string, string> = {
 }
 
 export default function TabbedResults({ results, onRegenerate, onStartInThread, inThreadProvider, autoCollapse }: Props) {
+  const { lang } = useLang()
   const [activeTab, setActiveTab] = useState(0)
   const [userCollapsed, setUserCollapsed] = useState<boolean | null>(null)
 
@@ -72,7 +75,7 @@ export default function TabbedResults({ results, onRegenerate, onStartInThread, 
             onClick={() => handleTabClick(i)}
           >
             <ProviderIcon provider={r.provider} size={14} />
-            <span className="tab-provider">{r.provider}</span>
+            <span className="tab-provider">{getProviderLabel(r.provider, lang)}</span>
             {STATUS_SYMBOLS[r.status] && (
               <span
                 className={`tab-status ${r.status === 'running' ? 'pulsing' : ''}`}

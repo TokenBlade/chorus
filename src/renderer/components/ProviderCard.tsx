@@ -3,6 +3,7 @@ import MarkdownRenderer from './MarkdownRenderer'
 import ProviderIcon from './ProviderIcon'
 import { useLang } from '../i18n/LangContext'
 import { ts } from '../i18n/translations'
+import { getProviderLabel } from '../utils/providerLabels'
 
 type UserRating = 'good' | 'bad' | null
 
@@ -159,7 +160,7 @@ export default function ProviderCard({ result, onRegenerate, onStartInThread, is
     <div className={`provider-card status-${result.status}`}>
       <div className="provider-header">
         <ProviderIcon provider={result.provider} size={16} />
-        <strong>{result.provider}</strong>
+        <strong>{getProviderLabel(result.provider, lang)}</strong>
         {result.status !== 'completed' && (
           <span style={{ color: STATUS_COLORS[result.status] || '#888', fontWeight: 600 }}>
             {result.status === 'failed' ? '\u2717' : result.status === 'timeout' ? '\u23f1' : result.status}

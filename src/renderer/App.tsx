@@ -9,6 +9,7 @@ import { applyTheme, DEFAULT_THEME, migrateLegacyThemeId } from './themes/themes
 import type { ThemeId } from './themes/themes'
 import { useLang } from './i18n/LangContext'
 import { ts } from './i18n/translations'
+import { getProviderLabel } from './utils/providerLabels'
 
 type ProviderResultData = {
   id: string
@@ -373,7 +374,7 @@ function App() {
                     <div className="turn-prompt">
                       <span className="turn-role">{ts(lang, 'turn.you')}</span>
                       {turn.results.length === 1 && (
-                        <span className="turn-target">{ts(lang, 'turn.to')} {turn.results[0].provider}</span>
+                        <span className="turn-target">{ts(lang, 'turn.to')} {getProviderLabel(turn.results[0].provider, lang)}</span>
                       )}
                       <span className="turn-time">{new Date(turn.createdAt).toLocaleTimeString()}</span>
                       <CollapsiblePrompt text={turn.prompt} />

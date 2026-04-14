@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { ts, tf } from '../i18n/translations'
 import ProviderIcon from './ProviderIcon'
+import { getProviderLabel } from '../utils/providerLabels'
 
 type Props = {
   provider: string
@@ -16,6 +17,7 @@ export default function InThreadInput({ provider, onSubmit, disabled, draft, onD
   const { lang } = useLang()
   const containerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const providerLabel = getProviderLabel(provider, lang)
 
   useEffect(() => { textareaRef.current?.focus() }, [])
 
@@ -41,14 +43,14 @@ export default function InThreadInput({ provider, onSubmit, disabled, draft, onD
     <div className={`in-thread-input provider-${provider}`} ref={containerRef}>
       <div className="in-thread-header">
         <span className="in-thread-indicator" />
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{ts(lang, 'inThread.chattingWith')} <ProviderIcon provider={provider} size={14} /> <strong>{provider}</strong></span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>{ts(lang, 'inThread.chattingWith')} <ProviderIcon provider={provider} size={14} /> <strong>{providerLabel}</strong></span>
       </div>
       <textarea ref={textareaRef} value={draft} onChange={(e) => onDraftChange(e.target.value)} onKeyDown={handleKeyDown} rows={3} disabled={disabled}
-        placeholder={tf(lang, 'inThread.placeholder', provider)} />
+        placeholder={tf(lang, 'inThread.placeholder', providerLabel)} />
       <div className="in-thread-footer">
         <span className="hint">{ts(lang, 'input.hint')}</span>
         <button onClick={handleSubmit} disabled={disabled || !draft.trim()}>
-          {disabled ? ts(lang, 'input.running') : tf(lang, 'inThread.sendTo', provider)}
+          {disabled ? ts(lang, 'input.running') : tf(lang, 'inThread.sendTo', providerLabel)}
         </button>
       </div>
     </div>

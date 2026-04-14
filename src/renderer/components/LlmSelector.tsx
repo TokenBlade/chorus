@@ -2,16 +2,11 @@ import { useState, useRef, useEffect } from 'react'
 import ProviderIcon from './ProviderIcon'
 import { useLang } from '../i18n/LangContext'
 import { ts, tf } from '../i18n/translations'
-import type { Lang } from '../i18n/translations'
+import { getProviderLabel } from '../utils/providerLabels'
 
 export const PROVIDER_IDS = [
   'chatgpt', 'claude', 'gemini', 'deepseek', 'moonshot', 'zai',
 ] as const
-
-function getProviderLabel(id: string, lang: Lang): string {
-  const key = `provider.${id}` as Parameters<typeof ts>[1]
-  return ts(lang, key) || id
-}
 
 const MAX_PROVIDERS = 6
 
