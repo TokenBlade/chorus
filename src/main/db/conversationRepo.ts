@@ -9,7 +9,7 @@ export function createConversation(title: string): ConversationRecord {
   const now = new Date().toISOString()
 
   db.prepare(
-    'INSERT INTO conversations (id, title, created_at, updated_at) VALUES (?, ?, ?, ?)'
+    'INSERT INTO conversations (id, title, hidden_in_sidebar, created_at, updated_at) VALUES (?, ?, 0, ?, ?)'
   ).run(id, title, now, now)
 
   return { id, title, createdAt: now, updatedAt: now }
@@ -27,9 +27,12 @@ export function getConversation(id: string): ConversationRecord | undefined {
 
 export function listConversations(): ConversationRecord[] {
   const db = getDb()
-  const rows = db.prepare('SELECT * FROM conversations ORDER BY updated_at DESC').all() as {
+  const rows = db.prepare(
+    'SELECT * FROM conversations WHERE hidden_in_sidebar = 0 ORDER BY updated_at DESC'
+  ).all() as {
     id: string
     title: string
+    hidden_in_sidebar: number
     created_at: string
     updated_at: string
   }[]
@@ -46,6 +49,11 @@ export function updateConversationTitle(id: string, title: string): void {
   const db = getDb()
   db.prepare('UPDATE conversations SET title = ?, updated_at = ? WHERE id = ?')
     .run(title, new Date().toISOString(), id)
+}
+
+export function hideConversationFromSidebar(id: string): void {
+  const db = getDb()
+  db.prepare('UPDATE conversations SET hidden_in_sidebar = 1 WHERE id = ?').run(id)
 }
 
 export function touchConversation(id: string): void {

@@ -11,6 +11,12 @@ const translations = {
     'sidebar.close': 'Close sidebar',
     'sidebar.newChat': 'New chat',
     'sidebar.noConversations': 'No conversations yet',
+    'sidebar.more': 'More options',
+    'sidebar.rename': 'Rename',
+    'sidebar.remove': 'Remove',
+    'sidebar.renamePlaceholder': 'Rename chat',
+    'sidebar.renameSave': 'Save',
+    'sidebar.renameCancel': 'Cancel',
 
     // Query input
     'input.placeholder': 'Enter your prompt here...',
@@ -66,6 +72,12 @@ const translations = {
     'sidebar.close': '关闭侧栏',
     'sidebar.newChat': '新对话',
     'sidebar.noConversations': '暂无对话',
+    'sidebar.more': '更多操作',
+    'sidebar.rename': '重命名',
+    'sidebar.remove': '移除',
+    'sidebar.renamePlaceholder': '重命名对话',
+    'sidebar.renameSave': '保存',
+    'sidebar.renameCancel': '取消',
 
     'input.placeholder': '输入你的问题...',
     'input.hint': 'Cmd+Enter 发送',

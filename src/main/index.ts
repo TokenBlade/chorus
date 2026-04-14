@@ -11,6 +11,7 @@ import {
   getConversation,
   listConversations,
   updateConversationTitle,
+  hideConversationFromSidebar,
   touchConversation,
   getProviderThreads,
   upsertProviderThread,
@@ -264,6 +265,19 @@ function registerIpc(): void {
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
       console.error('[IPC] rename-conversation failed:', message)
+      return { success: false, error: message }
+    }
+  })
+
+  // --- Hide a conversation from the sidebar without deleting local data ---
+  ipcMain.handle('hide-conversation', async (_event, conversationId: string) => {
+    try {
+      hideConversationFromSidebar(conversationId)
+      console.log(`[IPC] Hid conversation ${conversationId} from sidebar`)
+      return { success: true }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error('[IPC] hide-conversation failed:', message)
       return { success: false, error: message }
     }
   })

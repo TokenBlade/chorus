@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('send-message-in-conversation', conversationId, prompt, providers),
   renameConversation: (conversationId: string, title: string) =>
     ipcRenderer.invoke('rename-conversation', conversationId, title),
+  hideConversation: (conversationId: string) =>
+    ipcRenderer.invoke('hide-conversation', conversationId),
 
   // Provider session management
   initializeProvider: (provider: string) => ipcRenderer.invoke('initialize-provider', provider),

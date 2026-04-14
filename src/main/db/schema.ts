@@ -5,6 +5,7 @@ export function createTables(db: Database.Database): void {
     CREATE TABLE IF NOT EXISTS conversations (
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,
+      hidden_in_sidebar INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     )
@@ -60,8 +61,19 @@ export function createTables(db: Database.Database): void {
   `)
 
   // Migrations
+  migrateConversations(db)
   migrateQueries(db)
   migrateProviderResults(db)
+}
+
+function migrateConversations(db: Database.Database): void {
+  const columns = db.pragma('table_info(conversations)') as { name: string }[]
+  const colNames = columns.map((c) => c.name)
+
+  if (!colNames.includes('hidden_in_sidebar')) {
+    console.log('[Schema] Migrating conversations: adding hidden_in_sidebar column')
+    db.exec('ALTER TABLE conversations ADD COLUMN hidden_in_sidebar INTEGER NOT NULL DEFAULT 0')
+  }
 }
 
 function migrateQueries(db: Database.Database): void {

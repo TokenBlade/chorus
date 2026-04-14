@@ -59,6 +59,7 @@ declare global {
       getConversationDetails: (conversationId: string) => Promise<{ success: boolean; data?: ConversationData; error?: string }>
       sendMessageInConversation: (conversationId: string, prompt: string, providers?: string[]) => Promise<{ success: boolean; data?: { queryId: string; prompt: string; createdAt: string }; error?: string }>
       renameConversation: (conversationId: string, title: string) => Promise<{ success: boolean; error?: string }>
+      hideConversation: (conversationId: string) => Promise<{ success: boolean; error?: string }>
       initializeProvider: (provider: string) => Promise<{ success: boolean; error?: string }>
       saveProviderRating: (input: { providerResultId: string; score: number; tags: string[]; note?: string }) => Promise<{ success: boolean; error?: string }>
       onProviderStreamEvent: (callback: (data: StreamEvent) => void) => void
@@ -258,6 +259,53 @@ function App() {
     } catch (err) { setError(String(err)) }
   }
 
+  async function handleRenameConversation(conversationId: string, title: string): Promise<boolean> {
+    setError('')
+    try {
+      const trimmed = title.trim()
+      if (!trimmed) return false
+
+      const res = await window.electronAPI.renameConversation(conversationId, trimmed)
+      if (!res.success) {
+        setError(res.error || 'Failed to rename conversation')
+        return false
+      }
+
+      setConversationData((prev) => {
+        if (!prev || prev.conversation.id !== conversationId) return prev
+        return {
+          ...prev,
+          conversation: { ...prev.conversation, title: trimmed },
+        }
+      })
+      setHistoryRefreshKey((k) => k + 1)
+      return true
+    } catch (err) {
+      setError(String(err))
+      return false
+    }
+  }
+
+  async function handleRemoveConversation(conversationId: string): Promise<boolean> {
+    setError('')
+    try {
+      const res = await window.electronAPI.hideConversation(conversationId)
+      if (!res.success) {
+        setError(res.error || 'Failed to remove conversation from sidebar')
+        return false
+      }
+
+      if (activeConversationId === conversationId) {
+        handleNewChat()
+      }
+      setHistoryRefreshKey((k) => k + 1)
+      return true
+    } catch (err) {
+      setError(String(err))
+      return false
+    }
+  }
+
   function handleNewChat() {
     setActiveConversationId(null); setConversationData(null); setInThreadProvider(null)
     setInThreadDrafts({}); setLockedProviders(null); setSelectedProviders(getLastUsedProviders()); setError('')
@@ -302,7 +350,14 @@ function App() {
             </button>
           </div>
         </div>
-        <HistoryList onSelect={handleSelectConversation} onNewChat={handleNewChat} selectedConversationId={activeConversationId} refreshKey={historyRefreshKey} busyConversationId={busyConversationId} />
+        <HistoryList
+          onSelect={handleSelectConversation}
+          onRename={handleRenameConversation}
+          onRemove={handleRemoveConversation}
+          selectedConversationId={activeConversationId}
+          refreshKey={historyRefreshKey}
+          busyConversationId={busyConversationId}
+        />
       </aside>
 
       <main className="main-content">
