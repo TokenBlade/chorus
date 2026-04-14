@@ -470,7 +470,37 @@ export async function pasteText(page: Page, locator: Locator, text: string): Pro
     const saved = clipboard.readText()
     try {
       clipboard.writeText(text)
-      await locator.click()
+      await locator.waitFor({ state: 'visible', timeout: 5000 })
+      await locator.scrollIntoViewIfNeeded().catch(() => {})
+      try {
+        await locator.click({ timeout: 1500 })
+      } catch (err) {
+        console.warn('[baseAdapter] locator.click() failed during pasteText; falling back to programmatic focus:', err)
+        try {
+          await locator.focus()
+        } catch {
+          // Some rich editors reject Locator.focus() when a wrapper owns focus.
+        }
+        await locator.evaluate((node) => {
+          const el = node as HTMLElement
+          el.focus()
+
+          if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            const len = el.value.length
+            el.setSelectionRange(len, len)
+            return
+          }
+
+          if (el.isContentEditable) {
+            const selection = window.getSelection()
+            const range = document.createRange()
+            range.selectNodeContents(el)
+            range.collapse(false)
+            selection?.removeAllRanges()
+            selection?.addRange(range)
+          }
+        })
+      }
       const modifier = process.platform === 'darwin' ? 'Meta' : 'Control'
       await page.keyboard.press(`${modifier}+a`)
       await page.keyboard.press(`${modifier}+v`)

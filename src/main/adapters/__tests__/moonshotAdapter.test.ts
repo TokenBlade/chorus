@@ -34,13 +34,17 @@ describe('Moonshot: htmlToMarkdown conversion', () => {
 })
 
 describe('Moonshot: selector design', () => {
-  it('input selectors start with contenteditable', () => {
+  it('input selectors prioritize Kimi lexical editor before generic contenteditable', () => {
     const inputSelectors = [
+      '.chat-input-editor[contenteditable="true"]',
+      '[data-lexical-editor="true"].chat-input-editor',
+      'div[role="textbox"][contenteditable="true"].chat-input-editor',
       '[contenteditable="true"]',
       'textarea',
       '[role="textbox"]',
     ]
-    expect(inputSelectors[0]).toBe('[contenteditable="true"]')
+    expect(inputSelectors[0]).toContain('chat-input-editor')
+    expect(inputSelectors[3]).toBe('[contenteditable="true"]')
   })
 
   it('response selectors include semantic data attributes first', () => {
@@ -66,6 +70,19 @@ describe('Moonshot: selector design', () => {
     ]
     expect(stopSelectors.some(s => s.includes('取消'))).toBe(true)
     expect(stopSelectors.some(s => s.includes('停止'))).toBe(true)
+  })
+
+  it('overlay handling includes Kimi image viewer patterns', () => {
+    const blockingOverlays = [
+      '.image-main',
+      '[role="dialog"]',
+      '[aria-modal="true"]',
+      '[class*="lightbox"]',
+      '[class*="modal"]',
+      '[class*="viewer"]',
+    ]
+    expect(blockingOverlays).toContain('.image-main')
+    expect(blockingOverlays).toContain('[role="dialog"]')
   })
 })
 

@@ -18,9 +18,31 @@ import { waitUntil, waitForTextStability, htmlToMarkdown, pasteText, withClipboa
 
 const SELECTORS = {
   inputArea: [
+    '.chat-input-editor[contenteditable="true"]',      // primary: Kimi lexical editor
+    '[data-lexical-editor="true"].chat-input-editor',  // lexical editor variant
+    'div[role="textbox"][contenteditable="true"].chat-input-editor',
     '[contenteditable="true"]',                         // primary: contenteditable div
     'textarea',                                         // fallback: textarea
     '[role="textbox"]',                                 // fallback: ARIA textbox
+  ],
+
+  overlayCloseButton: [
+    'button[aria-label*="Close"]',
+    'button[aria-label*="close"]',
+    'button[aria-label*="关闭"]',
+    'button:has-text("Close")',
+    'button:has-text("关闭")',
+    'button:has-text("Done")',
+    'button:has-text("完成")',
+  ],
+
+  blockingOverlay: [
+    '.image-main',
+    '[role="dialog"]',
+    '[aria-modal="true"]',
+    '[class*="lightbox"]',
+    '[class*="modal"]',
+    '[class*="viewer"]',
   ],
 
   stopButton: [
@@ -81,6 +103,43 @@ async function findFirstOptional(page: Page, selectors: readonly string[], timeo
     }
   }
   return null
+}
+
+async function dismissOverlays(page: Page): Promise<void> {
+  let dismissed = false
+
+  for (const selector of SELECTORS.overlayCloseButton) {
+    try {
+      const btn = page.locator(selector).first()
+      if (await btn.isVisible({ timeout: 300 })) {
+        await btn.click({ timeout: 1000 })
+        dismissed = true
+        console.log(`[MoonshotAdapter] Dismissed overlay with: ${selector}`)
+        await new Promise((r) => setTimeout(r, 250))
+      }
+    } catch {
+      // try next selector
+    }
+  }
+
+  for (const selector of SELECTORS.blockingOverlay) {
+    try {
+      const overlay = page.locator(selector).first()
+      if (await overlay.isVisible({ timeout: 300 })) {
+        await page.keyboard.press('Escape').catch(() => {})
+        dismissed = true
+        console.log(`[MoonshotAdapter] Sent Escape to dismiss blocking overlay: ${selector}`)
+        await new Promise((r) => setTimeout(r, 250))
+        break
+      }
+    } catch {
+      // try next selector
+    }
+  }
+
+  if (dismissed) {
+    await new Promise((r) => setTimeout(r, 300))
+  }
 }
 
 /**
@@ -181,6 +240,7 @@ export function createMoonshotAdapter(): LlmAdapter {
       }
 
       try {
+        await dismissOverlays(page)
         await findFirst(page, SELECTORS.inputArea, 15000)
         console.log('[MoonshotAdapter] Page is ready — input area found')
       } catch {
@@ -192,6 +252,7 @@ export function createMoonshotAdapter(): LlmAdapter {
       const page = getMoonshotPage()
       console.log(`[MoonshotAdapter] sendPrompt — length: ${prompt.length} chars`)
 
+      await dismissOverlays(page)
       const inputLocator = await findFirst(page, SELECTORS.inputArea, 10000)
       await pasteText(page, inputLocator, prompt)
 
