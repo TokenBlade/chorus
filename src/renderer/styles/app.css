@@ -1273,7 +1273,7 @@ body {
 }
 
 .llm-dropdown-item:hover {
-  background: var(--bg-hover);
+  background: var(--bg-surface-alt);
 }
 
 .llm-add-hint {
